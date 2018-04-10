@@ -24,7 +24,7 @@ if !(has('job') && has('terminal'))
 endif
 
 let g:fzy_installed_sources = get(g:, 'fzy_installed_sources', {})
-let g:fzy_sources = get(g:, 'fzy_sources', ['files', 'oldfiles', 'git-ls-files', 'buffers', 'buflines', 'mixed-mru', 'smart-files'])
+let g:fzy_sources = get(g:, 'fzy_sources', ['files', 'oldfiles', 'git-ls-files', 'buffers', 'lines', 'mixed-mru', 'smart-files'])
 
 let g:fzy_options = ['--multi', '--no-mouse', '--no-hscroll']
 let g:fzy_default_action = 'drop'
@@ -45,7 +45,7 @@ command! -nargs=0 FzyOldfiles  call fzy#start('oldfiles')
 command! -nargs=0 FzyBuffer call fzy#start('buffers')
 command! -nargs=0 -bang FzySmartFiles  call fzy#start('smart-files')
 command! -nargs=0 -bang FzyMru  call fzy#start('mixed-mru')
-command! -nargs=0 FzyBufLines  call fzy#start('buflines')
+command! -nargs=0 FzyLines  call fzy#start('lines')
 
 nnoremap <silent> <Plug>(fzy-smart-files)  :<C-u>call fzy#start('smart-files')<CR>
 nnoremap <silent> <Plug>(fzy-mixed-mru)    :<C-u>call fzy#start('mixed-mru')<CR>
