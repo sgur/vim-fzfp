@@ -10,14 +10,18 @@ Description
 Demo
 ----
 
-V.S.
-----
-
 Requirement
 -----------
 
+* Vim8
+* fzf
+
 Usage
 -----
+
+```
+:Fzy
+```
 
 Install
 -------
@@ -25,6 +29,10 @@ Install
 License
 -------
 
+[MIT License](./LICENSE)
+
 Author
 ------
+
+sgur
 

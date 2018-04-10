@@ -1,5 +1,13 @@
 scriptencoding utf-8
 
+" sources =
+" short_name : {
+" 'name' : [string] statusline name
+" 'init' : [funcref] on source initialized,
+" 'accept' : [funcref] on selection accepted,
+" 'enter' : [funcref] on source displayed,
+" 'exit' : [funcref] on source disappeared,
+" }
 
 " Interface {{{1
 
@@ -174,6 +182,12 @@ function! s:build_pre_args(context) abort "{{{
   return cmd
 endfunction "}}}
 
+function! s:init() abort "{{{
+  for src in g:fzy_sources
+    execute 'runtime' 'autoload/fzy/' . src . '.vim'
+  endfor
+endfunction "}}}
+
 " Envrionment - Windows {{{2
 
 let s:env_win = {}
@@ -221,25 +235,8 @@ if has('win32') || has('win64')
 else
   let s:environment = s:env_unix
 endif
-" lockvar s:env_win s:env_unix s:environment
-
-" sources =
-" short_name : {
-" 'name' : [string] statusline name
-" 'init' : [funcref] on source initialized,
-" 'accept' : [funcref] on selection accepted,
-" 'enter' : [funcref] on source displayed,
-" 'exit' : [funcref] on source disappeared,
-" }
-
-function! s:init() abort "{{{
-  for src in g:fzy_sources
-    execute 'runtime' 'autoload/fzy/' . src . '.vim'
-  endfor
-endfunction "}}}
 
 call s:init()
-
 
 
 " 1}}}
