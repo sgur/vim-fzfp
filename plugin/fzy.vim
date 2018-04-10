@@ -23,6 +23,9 @@ if !(has('job') && has('terminal'))
   finish
 endif
 
+let g:fzy_installed_sources = get(g:, 'fzy_installed_sources', {})
+let g:fzy_sources = get(g:, 'fzy_sources', ['files', 'oldfiles', 'git-ls-files', 'buffers', 'buflines', 'mixed-mru', 'smart-files'])
+
 let g:fzy_options = ['--multi', '--no-mouse', '--no-hscroll']
 let g:fzy_default_action = 'drop'
 let g:fzy_action = {
@@ -34,16 +37,18 @@ let g:fzy_default_window = {'rows': 0, 'cols': 0}
 let g:fzy_use_history = 1
 let g:fzy_history_file = expand('~/.cache/fzf/history')
 
-command! -nargs=? -complete=dir FzyFiles  call fzy#files(<q-args>)
-command! -nargs=0 FzyGitLsFiles  call fzy#git_ls_files()
-command! -nargs=0 FzyOldfiles  call fzy#oldfiles()
-command! -nargs=0 FzyBuffer call fzy#buffer()
-command! -nargs=0 -bang FzySmartFiles  call fzy#smart_files()
-command! -nargs=0 -bang FzyMru  call fzy#mixed_mru()
-command! -nargs=0 FzyBufLines  call fzy#buflines()
+command! -nargs=0 Fzy  call fzy#start(0)
 
-nnoremap <silent> <Plug>(fzy-smart-files)  :<C-u>call fzy#smart_files()<CR>
-nnoremap <silent> <Plug>(fzy-mixed-mru)    :<C-u>call fzy#mixed_mru()<CR>
+command! -nargs=? -complete=dir FzyFiles  call fzy#start('files', {'basedir': <q-args>})
+command! -nargs=0 FzyGitLsFiles  call fzy#start('git-ls-files')
+command! -nargs=0 FzyOldfiles  call fzy#start('oldfiles')
+command! -nargs=0 FzyBuffer call fzy#start('buffers')
+command! -nargs=0 -bang FzySmartFiles  call fzy#start('smart-files')
+command! -nargs=0 -bang FzyMru  call fzy#start('mixed-mru')
+command! -nargs=0 FzyBufLines  call fzy#start('buflines')
+
+nnoremap <silent> <Plug>(fzy-smart-files)  :<C-u>call fzy#start('smart-files')<CR>
+nnoremap <silent> <Plug>(fzy-mixed-mru)    :<C-u>call fzy#start('mixed-mru')<CR>
 
 if !hasmapto("<Plug>(fzy-smart-files)", 'n') && empty(maparg("\<C-p>"))
   nmap <C-p> <Plug>(fzy-smart-files)
@@ -52,6 +57,12 @@ if !hasmapto("<Plug>(fzy-mixed-mru)", 'n') && empty(maparg("\<C-n>"))
   nmap <C-n> <Plug>(fzy-mixed-mru)
 endif
 
+if index(g:fzy_sources, 'oldfiles') >= 0 || index(g:fzy_sources, 'mixed-mru') >= 0
+  augroup plugin-fzy-oldfiles
+    autocmd!
+    autocmd BufReadPost *  call fzy#oldfiles#on_bufreadpost(expand('<afile>:p'))
+  augroup END
+endif
 
 let &cpoptions = s:save_cpo
 unlet s:save_cpo
