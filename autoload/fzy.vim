@@ -20,8 +20,8 @@ function! fzy#start(src, ...) abort
   endif
   let name = get(g:fzy_installed_sources[src], 'name', src)
   let context = g:fzy_installed_sources[src].init(a:0 ? a:1 : {})
-  if has_key(context, 'accept')
-    let context.accept = function('s:default_edit_command')
+  if has_key(g:fzy_installed_sources[src], 'accept')
+    let context.accept = g:fzy_installed_sources[src].accept
   endif
   call s:start(name, context)
 endfunction
@@ -102,7 +102,6 @@ function! s:term_exit_cb(temp, job, status) dict abort "{{{
     endif
 
     if a:status != 0
-      echomsg 'abort.' a:status string(output)
       if a:status == 130
         echohl WarningMsg | echo 'Abort.' | echohl NONE
       elseif a:status != 0
@@ -113,8 +112,9 @@ function! s:term_exit_cb(temp, job, status) dict abort "{{{
 
     let args = []
     for item in output[1:]
-      if has_key(self, 'handler') && type(self.handler) == v:t_func
+      if has_key(self, 'accept') && type(self.accept) == v:t_func
         let args += [item]
+        call s:log(item, 'edit/custom accept')
         continue
       endif
 
@@ -135,8 +135,10 @@ function! s:term_exit_cb(temp, job, status) dict abort "{{{
     endif
 
     silent hide
-    if has_key(self, 'handler') && type(self.handler) == v:t_func
-      call self.handler(command, args)
+    if has_key(self, 'accept') && type(self.accept) == v:t_func
+      call self.accept(command, args)
+    else
+      call s:default_edit_command(command, args)
     endif
   finally
     if has_key(self, 'staticfile') && delete(self.staticfile) != 0
