@@ -1,0 +1,2 @@
+# vim-fzy
+Fuzzy finder
