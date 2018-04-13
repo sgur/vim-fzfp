@@ -2,7 +2,7 @@ scriptencoding utf-8
 
 " sources =
 " short_name : {
-" 'name' : [string] statusline name
+" 'name' : [string] or [funcref] statusline name
 " 'init' : [funcref] on source initialized,
 " 'accept' : [funcref] on selection accepted,
 " 'enter' : [funcref] on source displayed,
@@ -26,8 +26,8 @@ function! fzy#start(src, ...) abort
     let src = g:fzy_sources[a:src]
     let s:start = a:src
   endif
-  let name = get(g:fzy_installed_sources[src], 'name', src)
   let context = g:fzy_installed_sources[src].init(a:0 ? a:1 : {})
+  let name = s:resolve_name(get(g:fzy_installed_sources[src], 'name', src))
   if has_key(g:fzy_installed_sources[src], 'accept')
     let context.accept = g:fzy_installed_sources[src].accept
   endif
@@ -64,6 +64,13 @@ endfunction "}}}
 function! s:default_edit_command(command, args) abort "{{{
   let ex_cmd = get(g:fzy_action, a:command, g:fzy_default_action)
   silent execute (len(a:args) == 1 ? ex_cmd : 'args') join(a:args)
+endfunction "}}}
+
+function! s:resolve_name(name) abort "{{{
+  if type(a:name) == v:t_func
+    return a:name()
+  endif
+  return a:name
 endfunction "}}}
 
 " Terminal {{{2

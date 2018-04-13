@@ -23,6 +23,10 @@ function! s:init(args) abort "{{{
   return g:fzy_installed_sources[s:src].init(a:args)
 endfunction "}}}
 
+function! s:name() abort "{{{
+  return 'smart-files[' . s:src . ']'
+endfunction "}}}
+
 function! s:on_exit_cb(job, status) abort "{{{
   if !a:status
     let s:src = 'git-ls-files'
@@ -35,7 +39,8 @@ endfunction "}}}
 " Initialization {{{1
 
 let g:fzy_installed_sources['smart-files'] = {
-      \ 'init': function('s:init')
+      \ 'init': function('s:init'),
+      \ 'name': function('s:name')
       \ }
 
 let s:src = ''
