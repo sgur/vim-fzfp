@@ -38,6 +38,9 @@ endfunction "}}}
 
 " Initialization {{{1
 
+runtime autoload/fzy/files.vim
+runtime autoload/fzy/git-ls-files.vim
+
 let g:fzy_installed_sources['smart-files'] = {
       \ 'init': function('s:init'),
       \ 'name': function('s:name')

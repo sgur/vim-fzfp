@@ -12,10 +12,8 @@ endfunction
 " Internal {{{1
 
 function! s:init(args) abort "{{{
-  let tempname = tempname()
-  call writefile(s:buffers(), tempname)
   return {
-        \ 'staticfile': tempname,
+        \ 'list': s:buffers()
         \ }
 endfunction "}}}
 

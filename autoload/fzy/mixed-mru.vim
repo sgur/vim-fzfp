@@ -8,11 +8,8 @@ scriptencoding utf-8
 " Internal {{{1
 
 function! s:init(args) abort "{{{
-  let tempname = tempname()
-  call writefile(fzy#buffers#list() + fzy#oldfiles#list(), tempname)
-
   return {
-        \ 'staticfile': tempname,
+        \ 'list': fzy#buffers#list() + fzy#oldfiles#list(),
         \ }
 endfunction "}}}
 

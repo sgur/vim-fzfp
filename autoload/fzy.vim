@@ -31,7 +31,7 @@ function! fzy#start(src, ...) abort
   if has_key(g:fzy_installed_sources[src], 'accept')
     let context.accept = g:fzy_installed_sources[src].accept
   endif
-  call s:start(name, context)
+  call s:term_start(name, context)
 endfunction
 
 
@@ -75,7 +75,7 @@ endfunction "}}}
 
 " Terminal {{{2
 
-function! s:start(name, context) abort "{{{
+function! s:term_start(name, context) abort "{{{
   let result_file = tempname()
   let base_dir = get(a:context, 'basedir', '')
   botright call term_start(s:environment.term_wrapped_cmd(s:build_fzf_args(a:context), result_file, base_dir), {
@@ -90,6 +90,7 @@ function! s:start(name, context) abort "{{{
         \ 'err_cb': function('s:term_error_cb')
         \ })
   setlocal statusline&
+  autocmd WinLeave <buffer>  call job_stop(term_getjob(bufnr('%')))
 endfunction "}}}
 
 function! s:term_error_cb(ch, msg) abort "{{{
@@ -156,9 +157,9 @@ function! s:term_exit_cb(temp, job, status) dict abort "{{{
       call s:default_edit_command(command, args)
     endif
   finally
-    if has_key(self, 'staticfile') && delete(self.staticfile) != 0
-      echoerr 'DELETE FAILED:' self.staticfile
-    endif
+    " if has_key(self, 'staticfile') && delete(self.staticfile) != 0
+    "   echoerr 'DELETE FAILED:' self.staticfile
+    " endif
     if filewritable(a:temp) && delete(a:temp) != 0
       echoerr 'DELETE FAILED:' a:temp
     endif
@@ -166,10 +167,10 @@ function! s:term_exit_cb(temp, job, status) dict abort "{{{
 endfunction "}}}
 
 function! s:build_fzf_args(context) abort "{{{
-  let cmd = s:build_pre_args(a:context) + ['fzf'] + ['--expect=ctrl-f,ctrl-b,' . join(keys(g:fzy_action), ',')]
-  let cmd += get(a:context, 'options', [])
-  let cmd += g:fzy_options
-  let cmd += exists('$FZF_DEFAULT_OPTS') ? [$FZF_DEFAULT_OPTS] : []
+  let cmd = s:build_pre_args(a:context) + ['fzf'] + ['--expect=ctrl-f,ctrl-b,' . join(keys(g:fzy_action), ',')] + get(a:context, 'options', []) + g:fzy_options
+  if exists('$FZF_DEFAULT_OPTS')
+    let cmd += [$FZF_DEFAULT_OPTS]
+  endif
   if g:fzy_use_history && filewritable(g:fzy_history_file)
     let cmd += ['--history='.g:fzy_history_file]
   endif
@@ -178,11 +179,20 @@ function! s:build_fzf_args(context) abort "{{{
 endfunction "}}}
 
 function! s:build_pre_args(context) abort "{{{
-  let cmd = has_key(a:context, 'staticfile')
-        \ ? [has('win32') || has('win64') ? 'type' : 'cat'] + [a:context.staticfile]
-        \ : has_key(a:context, 'cmd')
-        \   ? a:context.cmd
-        \   : []
+  if has_key(a:context, 'list')
+    let temppath = tempname()
+    call writefile(a:context.list, temppath)
+    let cmd = [has('win32') || has('win64') ? 'type' : 'cat'] + [temppath]
+  elseif has_key(a:context, 'staticfile')
+    let cmd = [has('win32') || has('win64') ? 'type' : 'cat']
+    for file in type(a:text.staticfile) == v:t_list ? a:text.staticfile : [a:text.staticfile]
+      let cmd += [file]
+    endfor
+  elseif has_key(a:context, 'cmd')
+    let cmd = a:context.cmd
+  else
+    let cmd = []
+  endif
   if !empty(cmd)
     let cmd += ['|']
   endif

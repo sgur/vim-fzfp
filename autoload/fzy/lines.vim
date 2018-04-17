@@ -5,13 +5,9 @@ scriptencoding utf-8
 " Interface {{{1
 
 function! s:init(args) abort "{{{
-  let tempname = tempname()
-  let cols = strlen(line('$'))
-  call writefile(map(getline(1, '$'), 'printf("%0' . cols . 'd", v:key+1) . ":" . v:val'), tempname)
-
   return {
         \ 'name': 'buffer: ' . bufname('%'),
-        \ 'staticfile': tempname,
+        \ 'list': map(getline(1, '$'), 'printf("%0' . strlen(line('$')). 'd", v:key+1) . ":" . v:val'),
         \ 'options': ['--reverse', '--no-sort'],
         \ }
 endfunction "}}}
