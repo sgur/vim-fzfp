@@ -25,7 +25,7 @@ endfunction "}}}
 
 " Initialization {{{1
 
-let g:fzy_installed_sources['lines'] = {
+let g:fzy#lines#source = {
       \ 'name': 'lines in current buffer',
       \ 'init': function('s:init'),
       \ 'accept': function('s:accept')

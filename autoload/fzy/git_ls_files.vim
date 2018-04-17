@@ -16,7 +16,8 @@ endfunction "}}}
 
 " Initialization {{{1
 
-let g:fzy_installed_sources['git-ls-files'] = {
+
+ let g:fzy#git_ls_files#source = {
       \ 'name': 'git ls-files',
       \ 'init': function('s:init')
       \ }

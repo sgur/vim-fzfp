@@ -18,30 +18,27 @@ function! s:init(args) abort "{{{
   endwhile
 
   if empty(s:src)
-    let s:src = 'files'
+    let s:src = g:fzy#files#source
   endif
-  return g:fzy_installed_sources[s:src].init(a:args)
+  return s:src.init(a:args)
 endfunction "}}}
 
 function! s:name() abort "{{{
-  return 'smart-files[' . s:src . ']'
+  return 'smart-files[' . s:src.name . ']'
 endfunction "}}}
 
 function! s:on_exit_cb(job, status) abort "{{{
   if !a:status
-    let s:src = 'git-ls-files'
+    let s:src = g:fzy#git_ls_files#source
   else
-    let s:src = 'files'
+    let s:src = g:fzy#files#source
   endif
 endfunction "}}}
 
 
 " Initialization {{{1
 
-runtime autoload/fzy/files.vim
-runtime autoload/fzy/git-ls-files.vim
-
-let g:fzy_installed_sources['smart-files'] = {
+let g:fzy#smart_files#source = {
       \ 'init': function('s:init'),
       \ 'name': function('s:name')
       \ }

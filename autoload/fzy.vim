@@ -11,10 +11,6 @@ scriptencoding utf-8
 
 " Interface {{{1
 
-function! fzy#refresh() abort
-  call s:init()
-endfunction
-
 function! fzy#start(src, ...) abort
   if empty(g:fzy_sources)
     echoerr 'Fzy: no sources'
@@ -26,10 +22,11 @@ function! fzy#start(src, ...) abort
     let src = g:fzy_sources[a:src]
     let s:start = a:src
   endif
-  let context = g:fzy_installed_sources[src].init(a:0 ? a:1 : {})
-  let name = s:resolve_name(get(g:fzy_installed_sources[src], 'name', src))
-  if has_key(g:fzy_installed_sources[src], 'accept')
-    let context.accept = g:fzy_installed_sources[src].accept
+  let src = substitute(src, '-', '_', 'g')
+  let context = g:fzy#{src}#source.init(a:0 ? a:1 : {})
+  let name = s:resolve_name(get(g:fzy#{src}#source, 'name', src))
+  if has_key(g:fzy#{src}#source, 'accept')
+    let context.accept = g:fzy#{src}#source.accept
   endif
   call s:term_start(name, context)
 endfunction
@@ -199,12 +196,6 @@ function! s:build_pre_args(context) abort "{{{
   return cmd
 endfunction "}}}
 
-function! s:init() abort "{{{
-  for src in g:fzy_sources
-    execute 'runtime' 'autoload/fzy/' . src . '.vim'
-  endfor
-endfunction "}}}
-
 " Envrionment - Windows {{{2
 
 let s:env_win = {}
@@ -252,8 +243,6 @@ if has('win32') || has('win64')
 else
   let s:environment = s:env_unix
 endif
-
-call s:init()
 
 
 " 1}}}

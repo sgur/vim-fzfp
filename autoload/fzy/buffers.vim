@@ -24,7 +24,7 @@ endfunction "}}}
 
 " Initialization {{{1
 
-let g:fzy_installed_sources['buffers'] = {
+let g:fzy#buffers#source = {
       \ 'init': function('s:init')
       \ }
 

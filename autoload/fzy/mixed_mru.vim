@@ -16,7 +16,7 @@ endfunction "}}}
 
 " Initialization {{{1
 
-let g:fzy_installed_sources['mixed-mru'] = {
+let g:fzy#mixed_mru#source = {
       \ 'name': 'buffers and oldfiles',
       \ 'init': function('s:init')
       \ }

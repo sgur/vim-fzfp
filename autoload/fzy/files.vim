@@ -18,7 +18,7 @@ endfunction
 
 " Initialization {{{1
 
-let g:fzy_installed_sources['files'] = {
+let g:fzy#files#source = {
       \ 'name': 'fzf files',
       \ 'init': function('s:init')
       \ }

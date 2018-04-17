@@ -25,7 +25,7 @@ endfunction "}}}
 
 " Initialization {{{1
 
-let g:fzy_installed_sources['tags'] = {
+let g:fzy#tags#source = {
       \ 'init': function('s:init')
       \ }
 

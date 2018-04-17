@@ -23,7 +23,6 @@ if !(has('job') && has('terminal'))
   finish
 endif
 
-let g:fzy_installed_sources = get(g:, 'fzy_installed_sources', {})
 let g:fzy_sources = get(g:, 'fzy_sources', ['files', 'oldfiles', 'git-ls-files', 'buffers', 'lines', 'mixed-mru', 'smart-files', 'tags'])
 
 let g:fzy_options = ['--multi', '--no-mouse', '--no-hscroll']
