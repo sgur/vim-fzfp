@@ -4,7 +4,7 @@ scriptencoding utf-8
 
 " Interface {{{1
 
-function! fzy#buffers#list() abort
+function! fzfp#buffers#list() abort
   return s:buffers()
 endfunction
 
@@ -24,7 +24,7 @@ endfunction "}}}
 
 " Initialization {{{1
 
-let g:fzy#buffers#source = {
+let g:fzfp#buffers#source = {
       \ 'init': function('s:init')
       \ }
 

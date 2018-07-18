@@ -25,7 +25,7 @@ endfunction "}}}
 
 " Initialization {{{1
 
-let g:fzy#tags#source = {
+let g:fzfp#tags#source = {
       \ 'init': function('s:init')
       \ }
 

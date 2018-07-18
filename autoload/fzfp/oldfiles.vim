@@ -4,7 +4,7 @@ scriptencoding utf-8
 
 " Interface {{{1
 
-function! fzy#oldfiles#list() abort
+function! fzfp#oldfiles#list() abort
   return s:oldfiles()
 endfunction
 
@@ -33,7 +33,7 @@ function! s:init_oldfiles() abort "{{{
   endif
 endfunction "}}}
 
-function! fzy#oldfiles#on_bufreadpost(path) abort "{{{
+function! fzfp#oldfiles#on_bufreadpost(path) abort "{{{
   call s:upsert(s:oldfiles, fnamemodify(a:path, ':p:~'))
 endfunction "}}}
 
@@ -48,7 +48,7 @@ endfunction "}}}
 
 " Initialization {{{1
 
-let g:fzy#oldfiles#source = {
+let g:fzfp#oldfiles#source = {
       \ 'init': function('s:init')
       \ }
 

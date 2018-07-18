@@ -18,7 +18,7 @@ function! s:init(args) abort "{{{
   endwhile
 
   if empty(s:src)
-    let s:src = g:fzy#files#source
+    let s:src = g:fzfp#files#source
   endif
   return s:src.init(a:args)
 endfunction "}}}
@@ -29,16 +29,16 @@ endfunction "}}}
 
 function! s:on_exit_cb(job, status) abort "{{{
   if !a:status
-    let s:src = g:fzy#git_ls_files#source
+    let s:src = g:fzfp#git_ls_files#source
   else
-    let s:src = g:fzy#files#source
+    let s:src = g:fzfp#files#source
   endif
 endfunction "}}}
 
 
 " Initialization {{{1
 
-let g:fzy#smart_files#source = {
+let g:fzfp#smart_files#source = {
       \ 'init': function('s:init'),
       \ 'name': function('s:name')
       \ }

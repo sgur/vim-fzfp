@@ -17,7 +17,7 @@ endfunction "}}}
 " Initialization {{{1
 
 
- let g:fzy#git_ls_files#source = {
+ let g:fzfp#git_ls_files#source = {
       \ 'name': 'git ls-files',
       \ 'init': function('s:init')
       \ }

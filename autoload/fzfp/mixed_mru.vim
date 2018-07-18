@@ -9,14 +9,14 @@ scriptencoding utf-8
 
 function! s:init(args) abort "{{{
   return {
-        \ 'list': fzy#buffers#list() + fzy#oldfiles#list(),
+        \ 'list': fzfp#buffers#list() + fzfp#oldfiles#list(),
         \ }
 endfunction "}}}
 
 
 " Initialization {{{1
 
-let g:fzy#mixed_mru#source = {
+let g:fzfp#mixed_mru#source = {
       \ 'name': 'buffers and oldfiles',
       \ 'init': function('s:init')
       \ }
