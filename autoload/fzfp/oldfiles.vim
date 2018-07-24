@@ -25,12 +25,19 @@ function! s:init_oldfiles() abort "{{{
   if !exists('s:oldfiles')
     let s:oldfiles = []
     for entry in v:oldfiles
-      if !filereadable(fnamemodify(entry, ':p'))
+      if s:is_localfile(entry) && !filereadable(fnamemodify(entry, ':p'))
         continue
       endif
       call s:upsert(s:oldfiles, entry)
     endfor
   endif
+endfunction "}}}
+
+function! s:is_localfile(fname) abort "{{{
+  if (has('win32') || has('win64')) && a:fname =~ '^\\'
+    return v:false
+  endif
+  return v:true
 endfunction "}}}
 
 function! fzfp#oldfiles#on_bufreadpost(path) abort "{{{
