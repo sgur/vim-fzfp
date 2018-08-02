@@ -59,6 +59,10 @@ function! s:log(msg, ...) abort "{{{
 endfunction "}}}
 
 function! s:default_edit_command(command, args) abort "{{{
+  if len(a:args) == 1 && isdirectory(a:args[0])
+    call fzfp#start('files', {'basedir': a:args[0]})
+    return
+  endif
   let ex_cmd = get(g:fzfp_action, a:command, g:fzfp_default_action)
   silent execute (len(a:args) == 1 ? ex_cmd : 'args') join(a:args)
 endfunction "}}}
@@ -131,7 +135,7 @@ function! s:term_exit_cb(temp, job, status) dict abort "{{{
         continue
       endif
 
-      if filereadable(expand(item))
+      if filereadable(expand(item)) || isdirectory(expand(item))
         let path = expand(item)
       elseif has_key(self, 'basedir') && filereadable(expand(self.basedir . item))
         let path = expand(self.basedir . item)
