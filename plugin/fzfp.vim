@@ -23,7 +23,7 @@ if !(has('job') && has('terminal'))
   finish
 endif
 
-let g:fzfp_sources = get(g:, 'fzfp_sources', ['files', 'oldfiles', 'git-ls-files', 'buffers', 'lines', 'mixed-mru', 'smart-files', 'tags'])
+let g:fzfp_sources = get(g:, 'fzfp_sources', ['files', 'oldfiles', 'git-ls-files', 'buffers', 'lines', 'mixed-mru', 'smart-files', 'tags', 'packages'])
 
 let g:fzfp_options = ['--multi', '--no-mouse', '--no-hscroll']
 let g:fzfp_default_action = 'drop'
@@ -46,6 +46,7 @@ command! -nargs=0 -bang FzfpSmartFiles  call fzfp#start('smart-files')
 command! -nargs=0 -bang FzfpMru  call fzfp#start('mixed-mru')
 command! -nargs=0 FzfpLines  call fzfp#start('lines')
 command! -nargs=0 FzfpTags  call fzfp#start('tags')
+command! -nargs=0 FzfpPackages  call fzfp#start('packages')
 
 nnoremap <silent> <Plug>(fzfp-smart-files)  :<C-u>call fzfp#start('smart-files')<CR>
 nnoremap <silent> <Plug>(fzfp-mixed-mru)    :<C-u>call fzfp#start('mixed-mru')<CR>
