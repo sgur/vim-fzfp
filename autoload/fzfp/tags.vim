@@ -22,11 +22,27 @@ function! s:tags() abort "{{{
   return _
 endfunction "}}}
 
+function! s:accept(command, args) abort "{{{
+  for line in a:args
+    let matches =matchlist(line, '^\(\p\+\)\t\(\f\+\)\t/\(.\+\)/;')
+    let [_1, _2, path, pattern; _3] = matches
+    for tagpath in tagfiles()
+      let base = fnamemodify(tagpath, ':p:h')
+      let path = expand(simplify(base . '/' . path))
+      if filereadable(path)
+        echomsg 'edit' '+/' . escape(pattern, ' ') path
+        execute 'edit' '+/' . escape(pattern, ' ') path
+      endif
+    endfor
+  endfor
+endfunction "}}}
+
 
 " Initialization {{{1
 
 let g:fzfp#tags#source = {
-      \ 'init': function('s:init')
+      \ 'init': function('s:init'),
+      \ 'accept': function('s:accept')
       \ }
 
 
