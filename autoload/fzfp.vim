@@ -186,7 +186,7 @@ function! s:build_pre_args(context) abort "{{{
     let cmd = [has('win32') || has('win64') ? 'type' : 'cat'] + [temppath]
   elseif has_key(a:context, 'staticfile')
     let cmd = [has('win32') || has('win64') ? 'type' : 'cat']
-    for file in type(a:text.staticfile) == v:t_list ? a:text.staticfile : [a:text.staticfile]
+    for file in type(a:context.staticfile) == v:t_list ? a:context.staticfile : [a:context.staticfile]
       let cmd += [file]
     endfor
   elseif has_key(a:context, 'cmd')
